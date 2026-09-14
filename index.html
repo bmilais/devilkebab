@@ -1,4 +1,4 @@
-?<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="hr">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -24,16 +24,23 @@
       --lime: #a3e635;
       --foreground: #f3eeff;
       --muted: #9c8cbd;
+      --fire-red: #ef4444;
+      --fire-orange: #f97316;
+      --flame: #fbbf24;
+      --fire-grad: linear-gradient(135deg, #ef4444, #f97316 60%, #c084fc);
     }
 
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; overflow-x: clip; }
 
     body {
       background: var(--bg);
       color: var(--foreground);
       font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-      overflow-x: hidden;
+      overflow-x: clip;
       line-height: 1.5;
+      background-image:
+        radial-gradient(circle at 85% 8%, rgba(249,115,22,0.06), transparent 40%),
+        radial-gradient(circle at 12% 70%, rgba(239,68,68,0.05), transparent 40%);
     }
     a { color: inherit; text-decoration: none; }
 
@@ -58,7 +65,9 @@
       border-right: 1px solid var(--line);
       display: flex; flex-direction: column;
       padding: 2rem 1.8rem;
-      box-shadow: inset -40px 0 80px -60px rgba(168,85,247,0.35);
+      box-shadow:
+        inset -40px 0 80px -60px rgba(168,85,247,0.35),
+        inset 0 -60px 80px -60px rgba(239,68,68,0.3);
     }
     .sidebar-logo { display: flex; flex-direction: column; align-items: flex-start; gap: 0.6rem; }
     .sidebar-logo img { width: 5rem; height: 5rem; object-fit: contain; filter: drop-shadow(0 0 22px rgba(168,85,247,0.8)); }
@@ -79,14 +88,16 @@
     .sidebar-nav a:hover .idx { color: var(--lime); }
 
     .sidebar-foot { margin-top: auto; border-top: 1px dashed var(--line); padding-top: 1.4rem; display: flex; flex-direction: column; gap: 0.9rem; }
+    .sidebar-lang .lang-btn { width: 100%; justify-content: center; padding: 0.7rem; border-color: var(--fire-orange); color: var(--fire-orange); }
+    .sidebar-lang .lang-btn:hover { border-color: var(--flame); color: var(--flame); }
     .side-phone a {
       display: flex; align-items: center; gap: 0.6rem;
-      background: linear-gradient(135deg, var(--primary), var(--primary-deep));
+      background: var(--fire-grad);
       color: #fff; padding: 0.8rem 1rem; font-weight: 900; font-size: 0.95rem;
-      box-shadow: 0 0 24px rgba(168,85,247,0.4);
+      box-shadow: 0 0 24px rgba(249,115,22,0.45);
       transition: transform 0.15s, box-shadow 0.15s;
     }
-    .side-phone a:hover { transform: translateY(-2px); box-shadow: 0 0 34px rgba(168,85,247,0.6); }
+    .side-phone a:hover { transform: translateY(-2px); box-shadow: 0 0 34px rgba(239,68,68,0.6); }
     .side-info { font-size: 0.72rem; color: var(--muted); line-height: 1.7; }
     .side-info strong { color: var(--foreground); }
     .side-socials { display: flex; gap: 1rem; }
@@ -94,9 +105,21 @@
     .side-socials a:hover { color: var(--primary); }
 
     /* ================= MAIN WRAPPER ================= */
-    .content { position: relative; }
+    .content { position: relative; min-width: 0; }
     @media (min-width: 1100px) {
       .content { margin-left: 300px; }
+    }
+    .sidebar { display: flex; }
+    @media (max-width: 1099px) { .sidebar { display: none; } }
+
+    @media (max-width: 380px) {
+      .shell { padding-inline: 1rem; }
+      .hero-inner { padding-inline: 1rem; }
+      .topbar-inner { padding-inline: 0.75rem; gap: 0.4rem; }
+      .topbar .logo .wordmark { font-size: 1rem; }
+      .topbar-call { font-size: 0.7rem; padding: 0.45rem 0.65rem; }
+      .cat { padding: 1.6rem 1.2rem; }
+      .row-feat { margin-inline: -1.2rem; padding-inline: 1.2rem; }
     }
 
     /* ================= MOBILE TOPBAR ================= */
@@ -127,93 +150,139 @@
     .lang-btn:hover { border-color: var(--primary); color: var(--primary); }
     .topbar-call {
       display: inline-flex; align-items: center; gap: 0.45rem;
-      background: linear-gradient(135deg, var(--primary), var(--primary-deep));
+      background: var(--fire-grad);
       color: #fff; font-weight: 900; font-size: 0.78rem;
       padding: 0.55rem 0.85rem; border-radius: 4px;
-      box-shadow: 0 0 18px rgba(168,85,247,0.45);
+      box-shadow: 0 0 18px rgba(249,115,22,0.5);
     }
     .topbar-quick {
-      display: flex; justify-content: space-around; align-items: center;
-      padding: 0.25rem 0.5rem; font-size: 0.6rem; font-weight: 700;
-      background: linear-gradient(90deg, #6d28d9, #a855f7, #6d28d9); color: #fff;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 0.1rem; text-align: center;
+      padding: 0.3rem 0.5rem; font-size: 0.58rem; font-weight: 700;
+      background: linear-gradient(90deg, #7c2d12, #ea580c, #7c2d12); color: #fff;
       font-family: ui-monospace, Consolas, monospace; text-transform: uppercase;
+      white-space: normal; line-height: 1.4;
     }
     @media (max-width: 1099px) { .topbar { display: block; } }
 
     /* Anchors offset for fixed topbar on mobile */
     @media (max-width: 1099px) {
-      #menu, #about, #visit { scroll-margin-top: 110px; }
+      #menu, #about, #visit { scroll-margin-top: 130px; }
     }
 
     /* ================= HERO ================= */
-    .hero { position: relative; padding: 3rem 0 4rem; overflow: hidden; }
-    @media (min-width: 1100px) { .hero { padding: 5rem 0 6rem; } }
+    .hero { position: relative; padding: 3rem 0 7rem; overflow: hidden; }
+    @media (min-width: 1200px) { .hero { padding: 6rem 0 9rem; } }
     .hero-bg {
       position: absolute; inset: 0; pointer-events: none;
       background-image:
-        radial-gradient(circle at 15% 20%, rgba(168,85,247,0.25), transparent 50%),
-        radial-gradient(circle at 90% 80%, rgba(232,121,249,0.14), transparent 45%);
+        radial-gradient(circle at 15% 20%, rgba(168,85,247,0.28), transparent 50%),
+        radial-gradient(circle at 85% 70%, rgba(239,68,68,0.22), transparent 45%),
+        radial-gradient(circle at 50% 100%, rgba(249,115,22,0.12), transparent 55%);
+      animation: fireGrow 7s ease-in-out infinite;
+    }
+    @keyframes fireGrow {
+      0%, 100% { opacity: 0.75; }
+      50% { opacity: 1; }
+    }
+    .hero-ember {
+      position: absolute; width: 4px; height: 4px; border-radius: 50%;
+      background: radial-gradient(circle, #fbbf24, #ef4444 60%, transparent);
+      opacity: 0; pointer-events: none;
+      animation: emberFloat linear infinite;
+    }
+    .hero-ember:nth-child(1) { left: 12%; bottom: 18%; animation-duration: 9s; animation-delay: 0s; }
+    .hero-ember:nth-child(2) { left: 42%; bottom: 30%; animation-duration: 11s; animation-delay: 2s; }
+    .hero-ember:nth-child(3) { left: 68%; bottom: 20%; animation-duration: 8s; animation-delay: 4s; }
+    .hero-ember:nth-child(4) { left: 88%; bottom: 40%; animation-duration: 12s; animation-delay: 1s; }
+    .hero-ember:nth-child(5) { left: 25%; bottom: 55%; animation-duration: 10s; animation-delay: 3s; }
+    @keyframes emberFloat {
+      0% { transform: translateY(0) scale(1); opacity: 0; }
+      10% { opacity: 0.9; }
+      100% { transform: translateY(-120px) scale(0.4); opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-bg { animation: none; }
+      .hero-ember { display: none; }
     }
     .hero-inner {
       position: relative; max-width: 1200px; margin: 0 auto; padding: 0 1.5rem;
       display: grid; gap: 2.5rem; align-items: center;
     }
-    @media (min-width: 1100px) {
+    .hero-inner > * { min-width: 0; }
+    @media (min-width: 1200px) {
       .hero-inner { grid-template-columns: 1.05fr 0.95fr; gap: 4rem; }
+    }
+    @media (max-width: 1199px) {
+      .hero { padding-top: 9rem; }
+      .hero-inner { text-align: center; justify-items: center; }
+      .hero-stamp { margin-inline: auto; }
+      .hero-sub { margin-left: auto; margin-right: auto; }
+      .hero-btns { justify-content: center; }
+      .hero-poster { display: none; }
     }
     .hero-stamp {
       display: inline-flex; align-items: center; gap: 0.7rem;
-      color: var(--lime); font-size: 0.68rem; font-weight: 700;
-      border: 1px dashed rgba(163,230,53,0.5);
+      color: var(--flame); font-size: 0.68rem; font-weight: 700;
+      border: 1px dashed rgba(251,191,36,0.55);
       padding: 0.35rem 0.7rem;
+      background: rgba(249,115,22,0.06);
     }
     h1 {
       font-family: 'Bebas Neue', 'Arial Narrow', 'Impact', system-ui, sans-serif;
       font-weight: 400;
-      font-size: clamp(4.6rem, 12vw, 9rem);
+      font-size: clamp(3.4rem, 14vw, 11.5rem);
       line-height: 0.8;
       text-transform: uppercase;
-      margin-top: 1.6rem;
+      margin-top: 2rem;
     }
     h1 .line1 {
       display: block;
-      background: linear-gradient(100deg, #c084fc, #a855f7 45%, #7c3aed);
+      background: linear-gradient(100deg, #fbbf24, #f97316 25%, #ef4444 55%, #a855f7 85%);
       -webkit-background-clip: text; background-clip: text;
       -webkit-text-fill-color: transparent; color: transparent;
-      filter: drop-shadow(0 6px 30px rgba(168,85,247,0.4));
+      filter: drop-shadow(0 6px 30px rgba(249,115,22,0.45));
     }
     h1 .line2 {
       display: block;
       color: transparent;
       -webkit-text-stroke: 2px var(--accent);
       -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 40px rgba(168,85,247,0.25);
+      text-shadow: 0 0 40px rgba(168,85,247,0.3);
     }
     @media (max-width: 600px) { h1 .line2 { -webkit-text-stroke-width: 1.2px; } }
     h1 .line3 {
       display: block; color: var(--foreground); font-size: 0.32em; letter-spacing: 0.42em;
-      margin-top: 0.6rem;
+      margin-top: 1.1rem;
     }
-    .hero-sub { margin-top: 1.8rem; max-width: 34rem; color: var(--muted); font-size: 1.02rem; line-height: 1.7; }
-    .hero-sub strong { color: var(--foreground); }
-    .hero-sub .dev { color: var(--accent); font-weight: 800; }
-    .hero-btns { margin-top: 2.2rem; display: flex; flex-wrap: wrap; gap: 1rem; }
+    .hero-sub { margin-top: 3.2rem; max-width: 34rem; color: var(--muted); font-size: 1.05rem; line-height: 1.7; }
+    .hero-hours {
+      display: inline-flex; flex-direction: column; align-items: center;
+      color: var(--fire-orange); font-weight: 900; font-size: 0.9rem;
+      letter-spacing: 0.08em;
+      font-family: ui-monospace, Consolas, monospace;
+      padding: 0.5rem 0.9rem;
+      background: rgba(249,115,22,0.08);
+      border: 1px solid rgba(249,115,22,0.2);
+      line-height: 1.8;
+    }
+    .hero-btns { margin-top: 2.8rem; display: flex; flex-wrap: wrap; gap: 1rem; }
     .btn-solid {
-      background: linear-gradient(135deg, var(--primary), var(--primary-deep));
+      background: var(--fire-grad);
       color: #fff; padding: 0.95rem 1.9rem;
       font-weight: 900; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.12em;
-      border: 1px solid rgba(233,213,255,0.3);
-      box-shadow: 0 0 30px rgba(168,85,247,0.5);
+      border: 1px solid rgba(253,230,190,0.3);
+      box-shadow: 0 0 30px rgba(239,68,68,0.5);
       transition: transform 0.15s, box-shadow 0.15s;
     }
-    .btn-solid:hover { transform: translateY(-3px); box-shadow: 0 0 44px rgba(168,85,247,0.75); }
+    .btn-solid:hover { transform: translateY(-3px); box-shadow: 0 0 44px rgba(249,115,22,0.7); }
     .btn-ghost {
       color: var(--foreground); padding: 0.95rem 1.9rem;
       font-weight: 800; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.12em;
       border: 1px solid var(--line); background: rgba(168,85,247,0.05);
       transition: border-color 0.15s, color 0.15s;
     }
-    .btn-ghost:hover { border-color: var(--primary); color: var(--accent); }
+    .btn-ghost:hover { border-color: var(--fire-orange); color: var(--flame); }
 
     .hero-poster { position: relative; justify-self: center; width: 100%; max-width: 30rem; }
     .hero-poster img {
@@ -223,7 +292,7 @@
     }
     .hero-poster::before {
       content: ""; position: absolute; inset: -8px;
-      background: linear-gradient(135deg, rgba(168,85,247,0.35), transparent 55%);
+      background: linear-gradient(135deg, rgba(239,68,68,0.35), rgba(168,85,247,0.25) 60%, transparent);
       clip-path: polygon(7% 0, 100% 0, 93% 100%, 0 100%);
       z-index: -1;
     }
@@ -231,10 +300,11 @@
       position: absolute; right: 4%; bottom: 8%;
       font-family: ui-monospace, Consolas, monospace;
       font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase;
-      background: var(--lime); color: #111; padding: 0.3rem 0.6rem;
+      background: linear-gradient(135deg, var(--fire-orange), var(--fire-red));
+      color: #fff; padding: 0.3rem 0.6rem;
       transform: rotate(-6deg); font-weight: 900;
+      box-shadow: 0 0 18px rgba(249,115,22,0.6);
     }
-    @media (max-width: 1099px) { .hero-poster { display: none; } }
 
     /* ================= MARQUEE ================= */
     .marquee {
@@ -254,7 +324,15 @@
       color: var(--muted);
     }
     .marquee-track span i { font-style: normal; color: var(--primary); }
-    .marquee-track span b { font-style: normal; color: var(--lime); font-family: ui-monospace, Consolas, monospace; font-size: 0.8rem; }
+    .marquee-track span b {
+      font-style: normal; color: var(--flame);
+      font-family: ui-monospace, Consolas, monospace; font-size: 0.8rem;
+      text-shadow: 0 0 12px rgba(251,191,36,0.6);
+    }
+    .marquee-track span em {
+      font-style: normal; color: var(--fire-orange);
+      text-shadow: 0 0 12px rgba(249,115,22,0.6);
+    }
     @keyframes scroll { to { transform: translateX(-50%); } }
     @media (prefers-reduced-motion: reduce) {
       .marquee-track { animation: none; }
@@ -268,19 +346,33 @@
       display: inline-flex; align-items: center; gap: 0.7rem;
       font-family: ui-monospace, Consolas, monospace;
       font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.24em;
-      color: var(--lime);
+      color: var(--flame);
     }
-    .sect-tag::before { content: "///"; color: var(--primary-deep); }
+    .sect-tag::before { content: "///"; color: var(--fire-orange); }
+    .sect-tag.lg {
+      font-family: 'Bebas Neue', 'Arial Narrow', 'Impact', system-ui, sans-serif;
+      font-weight: 400;
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      line-height: 0.95;
+      letter-spacing: 0.05em;
+      display: inline-flex; align-items: center; gap: 1rem;
+      text-transform: uppercase;
+    }
     .sect-title { font-size: clamp(2.8rem, 6vw, 4.5rem); line-height: 0.95; margin-top: 0.7rem; }
     .sect-title .ghost { color: transparent; -webkit-text-stroke: 1.5px var(--primary-deep); }
-    .sect-title .lime { color: var(--lime); }
+    .sect-title .lime { color: var(--flame); }
+    .sect-title .fire {
+      background: linear-gradient(90deg, var(--flame), var(--fire-orange), var(--fire-red));
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent; color: transparent;
+    }
     .sect-desc { margin-top: 1.2rem; color: var(--muted); max-width: 30rem; font-size: 0.95rem; line-height: 1.7; }
 
     /* ================= MENU BOARD ================= */
     #menu { background: var(--bg-2); border-block: 1px solid var(--line); }
     #menu .menu-intro { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 3rem; }
     .menu-note { font-family: ui-monospace, Consolas, monospace; font-size: 0.68rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.18em; text-align: right; line-height: 1.9; }
-    .menu-note strong { color: var(--lime); }
+    .menu-note strong { color: var(--flame); text-shadow: 0 0 10px rgba(251,191,36,0.5); }
 
     .cat {
       background: var(--board);
@@ -293,9 +385,52 @@
     .cat::before, .cat::after {
       content: "";
       position: absolute; width: 22px; height: 22px; pointer-events: none;
+      background: radial-gradient(circle, rgba(249,115,22,0.75), transparent 70%);
+      filter: blur(6px);
     }
-    .cat::before { top: -1px; left: -1px; border-top: 3px solid var(--primary); border-left: 3px solid var(--primary); }
-    .cat::after { bottom: -1px; right: -1px; border-bottom: 3px solid var(--primary); border-right: 3px solid var(--primary); }
+    .cat::before {
+      top: 0; left: 0;
+      border-top: 3px solid var(--fire-orange); border-left: 3px solid var(--fire-orange);
+      background: none;
+    }
+    .cat::after {
+      bottom: 0; right: 0;
+      border-bottom: 3px solid var(--fire-orange); border-right: 3px solid var(--fire-orange);
+      background: none;
+    }
+
+    /* ============ JUMP NAV ============ */
+    .jump-nav {
+      position: sticky; top: 0; z-index: 40;
+      display: flex; align-items: center; gap: 0.4rem;
+      flex-wrap: wrap;
+      margin-bottom: 2.4rem; padding: 0.5rem;
+      background: rgba(18,8,30,0.92);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--line);
+    }
+    .jump-nav a {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.5rem 0.85rem; white-space: nowrap;
+      font-family: ui-monospace, Consolas, monospace;
+      font-size: 0.7rem; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.12em;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      background: rgba(13,5,22,0.6);
+      transition: border-color 0.15s, color 0.15s, background 0.15s, box-shadow 0.15s;
+    }
+    .jump-nav a:hover { border-color: var(--fire-orange); color: var(--flame); }
+    .jump-nav a.active {
+      background: var(--fire-grad);
+      border-color: transparent;
+      color: #fff;
+      box-shadow: 0 0 18px rgba(239,68,68,0.45);
+    }
+    @media (max-width: 1099px) { .jump-nav { top: 100px; } }
+
+    .cat { scroll-margin-top: 100px; }
+    @media (max-width: 1099px) { .cat { scroll-margin-top: 175px; } }
 
     .cat-head {
       display: flex; align-items: baseline; gap: 1rem; flex-wrap: wrap;
@@ -307,49 +442,80 @@
       display: inline-flex; align-items: center; gap: 0.7rem;
     }
     .cat-name .ict { font-family: system-ui; }
-    .cat-code { font-family: ui-monospace, Consolas, monospace; font-size: 0.66rem; color: var(--primary-deep); letter-spacing: 0.2em; }
-    .cat-head .catsub { margin-left: auto; font-family: ui-monospace, Consolas, monospace; font-size: 0.62rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.16em; }
+    .cat-code { font-family: ui-monospace, Consolas, monospace; font-size: 0.66rem; color: var(--fire-orange); letter-spacing: 0.2em; }
 
     .items { display: grid; gap: 0.9rem; }
     @media (min-width: 800px) { .items { grid-template-columns: 1fr 1fr; column-gap: 3rem; } }
     .row { display: flex; align-items: baseline; gap: 0.6rem; }
-    .row-feat { display: flex; align-items: baseline; gap: 0.6rem; background: rgba(163,230,53,0.05); border-left: 3px solid var(--lime); margin-left: -1.6rem; margin-right: -1.6rem; padding: 0.5rem 1.6rem; }
+    .row-feat { display: flex; align-items: baseline; gap: 0.6rem; background: linear-gradient(90deg, rgba(249,115,22,0.09), rgba(163,230,53,0.05)); border-left: 3px solid var(--fire-orange); margin-left: -1.6rem; margin-right: -1.6rem; padding: 0.5rem 1.6rem; }
     .row-name { font-weight: 800; font-size: 0.98rem; }
-    .row-name .idx2 { color: var(--primary-deep); font-family: ui-monospace, Consolas, monospace; font-size: 0.66rem; margin-right: 0.5rem; }
     .row-name small { display: block; font-weight: 500; color: var(--muted); font-size: 0.76rem; margin-top: 0.15rem; line-height: 1.5; }
     .row-dots { flex: 1; border-bottom: 2px dotted var(--line); align-self: flex-end; margin-bottom: 0.3rem; }
     .row-price { color: var(--lime); font-weight: 900; font-size: 1.02rem; white-space: nowrap; text-shadow: 0 0 12px rgba(163,230,53,0.3); }
     .row-price small { font-size: 0.66rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
-    .star { color: var(--lime); margin-right: 0.25rem; }
+    .row-price .sz { display: inline-block; min-width: 1.6rem; font-size: 0.62rem; font-weight: 800; color: var(--flame); letter-spacing: 0.12em; }
+    .combo-tag {
+      grid-column: 1 / -1; width: fit-content;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: ui-monospace, Consolas, monospace; font-size: 0.62rem; font-weight: 900;
+      text-transform: uppercase; letter-spacing: 0.18em;
+      color: var(--fire-orange);
+      border: 1px solid var(--fire-orange);
+      background: linear-gradient(90deg, rgba(239,68,68,0.18), rgba(249,115,22,0.12));
+      padding: 0.45rem 0.9rem; margin: 0.4rem 0 0.2rem;
+      box-shadow: 0 0 14px rgba(249,115,22,0.25);
+    }
+    .star { color: var(--flame); margin-right: 0.25rem; text-shadow: 0 0 8px rgba(251,191,36,0.6); }
+
+    .kt { display: flex; flex-direction: column; }
+    .kt-head, .kt-row { display: grid; grid-template-columns: 1.5fr 0.85fr 0.85fr 0.85fr; gap: 0.4rem 0.8rem; align-items: baseline; }
+    .kt-head { border-bottom: 2px solid var(--line); padding-bottom: 0.5rem; margin-bottom: 0.3rem; }
+    .kt-h { font-family: ui-monospace, Consolas, monospace; font-size: 0.66rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); text-align: right; }
+    .kt-h:first-child { text-align: left; color: var(--fire-orange); }
+    .kt-row { padding: 0.5rem 0; border-bottom: 1px dashed var(--line); }
+    .kt-name { font-weight: 800; font-size: 0.95rem; line-height: 1.3; }
+    .kt-spec { display: block; font-weight: 500; color: var(--muted); font-size: 0.72rem; margin-top: 0.15rem; line-height: 1.5; }
+    .kt-p { font-weight: 900; font-size: 0.95rem; color: var(--lime); white-space: nowrap; text-align: right; }
+    .kt-p b { font-weight: 400; color: var(--muted); font-size: 0.6rem; display: block; text-transform: uppercase; letter-spacing: 0.08em; }
+    @media (max-width: 700px) {
+      .kt-head, .kt-row { grid-template-columns: 1.2fr 1fr 1fr 1fr; gap: 0.3rem 0.25rem; }
+      .kt-h { font-size: 0.56rem; }
+      .kt-p { font-size: 0.78rem; }
+      .kt-name { font-size: 0.84rem; }
+      .kt-spec { font-size: 0.63rem; }
+    }
 
     /* ================= ABOUT ================= */
     #about { background: var(--bg); }
     .about-inner { display: grid; gap: 3rem; align-items: center; }
+    .about-inner > * { min-width: 0; }
     @media (min-width: 1100px) { .about-inner { grid-template-columns: 0.9fr 1.1fr; gap: 4rem; } }
     .about-visual { position: relative; max-width: 30rem; }
     .about-visual .bin {
-      position: absolute; inset: 0; background: linear-gradient(135deg, rgba(168,85,247,0.4), transparent 60%);
+      position: absolute; inset: 0; background: linear-gradient(135deg, rgba(239,68,68,0.35), rgba(249,115,22,0.25) 50%, rgba(168,85,247,0.4) 100%);
       clip-path: polygon(0 0, 100% 4%, 100% 100%, 0 96%);
       z-index: -1; transform: rotate(1.6deg) scale(1.06);
     }
     .about-visual img { width: 100%; display: block; clip-path: polygon(0 0, 100% 4%, 100% 100%, 0 96%); border: 1px solid var(--line); }
     .about-visual .label-strip {
       position: absolute; left: -12px; bottom: 24px;
-      background: var(--lime); color: #111; font-weight: 900;
+      background: linear-gradient(135deg, var(--fire-orange), var(--fire-red));
+      color: #fff; font-weight: 900;
       font-family: ui-monospace, Consolas, monospace; font-size: 0.66rem; letter-spacing: 0.2em; text-transform: uppercase;
       padding: 0.4rem 0.9rem; transform: rotate(-3deg);
-      box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.4), 0 0 18px rgba(249,115,22,0.55);
     }
     .about-copy p { margin-top: 1.5rem; color: var(--muted); line-height: 1.85; }
     .stats { margin-top: 2.4rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
     .stat { border: 1px dashed var(--line); padding: 1.2rem 0.6rem; text-align: center; background: var(--board); position: relative; }
-    .stat:hover { border-color: var(--primary); }
-    .stat-num { font-family: 'Bebas Neue', system-ui, sans-serif; font-size: 2.4rem; color: var(--primary); text-shadow: 0 0 24px rgba(168,85,247,0.5); line-height: 1; }
+    .stat:hover { border-color: var(--fire-orange); }
+    .stat-num { font-family: 'Bebas Neue', system-ui, sans-serif; font-size: 2.4rem; background: linear-gradient(90deg, var(--flame), var(--fire-orange)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; filter: drop-shadow(0 0 18px rgba(249,115,22,0.45)); line-height: 1; }
     .stat-label { font-size: 0.62rem; color: var(--muted); font-family: ui-monospace, Consolas, monospace; text-transform: uppercase; letter-spacing: 0.18em; margin-top: 0.5rem; }
 
     /* ================= VISIT ================= */
     #visit { background: var(--bg-2); border-top: 1px solid var(--line); }
     .visit-grid { display: grid; gap: 1.4rem; margin-top: 3rem; }
+    .visit-grid > * { min-width: 0; }
     @media (min-width: 900px) { .visit-grid { grid-template-columns: repeat(2, 1fr); } }
     .vcard {
       display: block; position: relative;
@@ -359,20 +525,22 @@
       transition: border-color 0.18s, transform 0.18s;
     }
     .vcard::after {
-      content: ""; position: absolute; right: -40px; bottom: -40px; width: 120px; height: 120px;
-      background: radial-gradient(circle, rgba(168,85,247,0.22), transparent 70%);
+      content: ""; position: absolute; right: -40px; bottom: -40px; width: 130px; height: 130px;
+      background: radial-gradient(circle, rgba(249,115,22,0.25), transparent 70%);
       pointer-events: none;
     }
-    .vcard:hover { border-color: var(--primary); transform: translateY(-3px); }
+    .vcard:hover { border-color: var(--fire-orange); transform: translateY(-3px); }
     .vcard svg { color: var(--primary); stroke-width: 2; filter: drop-shadow(0 0 12px rgba(168,85,247,0.5)); }
+    .vcard:hover svg { color: var(--fire-orange); filter: drop-shadow(0 0 14px rgba(249,115,22,0.6)); }
     .vcard h3 { font-size: 1.5rem; letter-spacing: 0.1em; margin: 0.8rem 0 0.4rem; }
     .vcard p { font-size: 0.86rem; color: var(--muted); line-height: 1.7; }
-    .vcard.v-lime svg { color: var(--lime); filter: drop-shadow(0 0 12px rgba(163,230,53,0.5)); }
-    .vcard.v-lime h3 { color: var(--lime); }
-    .vcard .mono { font-family: ui-monospace, Consolas, monospace; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--primary-deep); }
+    .vcard.v-lime svg { color: var(--flame); filter: drop-shadow(0 0 12px rgba(251,191,36,0.5)); }
+    .vcard.v-lime h3 { color: var(--flame); }
+    .vcard .mono { font-family: ui-monospace, Consolas, monospace; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--fire-orange); }
 
     /* ================= FOOTER ================= */
     footer { background: var(--sidebar-bg); border-top: 1px solid var(--line); padding: 2.5rem 0; }
+    @media (max-width: 767px) { footer { padding-bottom: 6rem; } }
     .foot { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.2rem; }
     .foot-brand { display: flex; align-items: center; gap: 0.8rem; }
     .foot-brand img { height: 2.4rem; width: 2.4rem; object-fit: contain; filter: drop-shadow(0 0 10px rgba(168,85,247,0.7)); }
@@ -381,7 +549,7 @@
     .foot-brand .sub { font-size: 0.68rem; color: var(--muted); }
     .foot-socials { display: flex; gap: 1.4rem; }
     .foot-socials a { color: var(--muted); display: inline-flex; gap: 0.5rem; align-items: center; font-size: 0.82rem; font-weight: 700; transition: color 0.15s; }
-    .foot-socials a:hover { color: var(--primary); }
+    .foot-socials a:hover { color: var(--fire-orange); }
     .foot-copy { font-size: 0.68rem; color: var(--muted); font-family: ui-monospace, Consolas, monospace; text-transform: uppercase; letter-spacing: 0.1em; }
 
     /* ================= STICKY ORDER (mobile) ================= */
@@ -391,11 +559,11 @@
     }
     .sticky-order a {
       display: flex; align-items: center; justify-content: center; gap: 0.6rem;
-      background: linear-gradient(135deg, var(--primary), var(--primary-deep));
+      background: var(--fire-grad);
       color: #fff; padding: 1rem; font-weight: 900; font-size: 0.92rem;
       text-transform: uppercase; letter-spacing: 0.1em;
-      border: 1px solid rgba(233,213,255,0.3);
-      box-shadow: 0 10px 34px rgba(168,85,247,0.6);
+      border: 1px solid rgba(253,230,190,0.3);
+      box-shadow: 0 10px 34px rgba(239,68,68,0.6);
       transition: transform 0.15s;
     }
     .sticky-order a:hover { transform: scale(1.02); }
@@ -417,6 +585,12 @@
     <a href="#visit"><span class="idx">03</span>Lokacija</a>
   </nav>
   <div class="sidebar-foot">
+    <div class="sidebar-lang">
+      <button class="lang-btn lang-switch" onclick="toggleLang()" aria-label="Language">
+        <span class="flag">🇺🇸</span>
+        <span class="lang-label">EN</span>
+      </button>
+    </div>
     <div class="side-phone">
       <a href="tel:+385997516752">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"></path></svg>
@@ -449,9 +623,9 @@
       <span class="wordmark">DEVIL <em>KEBAB</em></span>
     </a>
     <div class="topbar-right">
-      <button class="lang-btn" id="langToggle" onclick="toggleLang()">
+      <button class="lang-btn lang-switch" onclick="toggleLang()" aria-label="Language">
         <span class="flag">🇺🇸</span>
-        <span id="langLabel">EN</span>
+        <span class="lang-label" id="langLabel">EN</span>
       </button>
       <a href="tel:+385997516752" class="topbar-call">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"></path></svg>
@@ -461,7 +635,7 @@
   </div>
   <div class="topbar-quick">
     <span data-hr="099 751 6752" data-en="099 751 6752">099 751 6752</span>
-    <span data-hr="Pon–Čet 9–23 · Pet–Sub 9–02" data-en="Mon–Thu 9–11 PM · Fri–Sat 9–2 AM">Pon–Čet 9–23 · Pet–Sub 9–02</span>
+    <span data-hr="Pon–Čet 09–23 · Pet–Sub 09–02 · Ned 16–23" data-en="Mon–Thu 9 AM–11 PM · Fri–Sat 9 AM – 2 AM · Sun 4 AM–11 PM">Pon–Čet 09–23 · Pet–Sub 09–02 · Ned 16–23</span>
   </div>
 </div>
 
@@ -470,6 +644,11 @@
   <!-- ===== HERO ===== -->
   <section class="hero" id="top">
     <div class="hero-bg"></div>
+    <span class="hero-ember"></span>
+    <span class="hero-ember"></span>
+    <span class="hero-ember"></span>
+    <span class="hero-ember"></span>
+    <span class="hero-ember"></span>
     <div class="hero-inner">
       <div>
         <span class="hero-stamp stamp" data-hr="Daruvar · Hrvatska · Otvoreno svaki dan" data-en="Daruvar · Croatia · Open daily">Daruvar · Hrvatska · Otvoreno svaki dan</span>
@@ -479,9 +658,7 @@
           <span class="line3" data-hr="The Best Kebab" data-en="The Best Kebab">The Best Kebab</span>
         </h1>
         <p class="hero-sub">
-          <strong data-hr="Kebab kakav Daruvar zaslužuje." data-en="The kebab Daruvar deserves.">Kebab kakav Daruvar zaslužuje.</strong>
-          <br>
-          <span data-hr="Svježe pečeno, obilno napunjeno, spremno za par minuta. <span class='dev'>Bez prečaca — samo vatra</span> na tanjuru." data-en="Freshly grilled, generously packed, ready in minutes. <span class='dev'>No shortcuts — just fire</span> on a plate.">Svježe pečeno, obilno napunjeno, spremno za par minuta. <span class="dev">Bez prečaca — samo vatra</span> na tanjuru.</span>
+          <span class="hero-hours" data-hr="Pon–Čet · 9–23h<br>Pet–Sub · 9–02h<br>Ned · 16–23h" data-en="Mon–Thu · 9 AM – 11 PM<br>Fri–Sat · 9 AM – 2 AM<br>Sun · 4 AM – 11 PM">Pon–Čet · 9–23h<br>Pet–Sub · 9–02h<br>Ned · 16–23h</span>
         </p>
         <div class="hero-btns">
           <a href="#menu" class="btn-solid" data-hr="Pogledaj jelovnik" data-en="See the menu">Pogledaj jelovnik</a>
@@ -498,10 +675,10 @@
   <!-- ===== MARQUEE ===== -->
   <div class="marquee" aria-hidden="true">
     <div class="marquee-track">
-      <span>Devil Kebab <i>★</i> Daruvar <i>★</i> Ljut &amp; Sočno <b>HOT</b></span>
-      <span>Devil Kebab <i>★</i> Daruvar <i>★</i> Ljut &amp; Sočno <b>HOT</b></span>
-      <span>Devil Kebab <i>★</i> Daruvar <i>★</i> Ljut &amp; Sočno <b>HOT</b></span>
-      <span>Devil Kebab <i>★</i> Daruvar <i>★</i> Ljut &amp; Sočno <b>HOT</b></span>
+      <span>Devil Kebab <i>★</i> Daruvar <i>★</i> <em>Ljuto &amp; Sočno</em> <b>HOT</b> 🔥</span>
+      <span>Devil Kebab <i>★</i> Daruvar <i>★</i> <em>Ljuto &amp; Sočno</em> <b>HOT</b> 🔥</span>
+      <span>Devil Kebab <i>★</i> Daruvar <i>★</i> <em>Ljuto &amp; Sočno</em> <b>HOT</b> 🔥</span>
+      <span>Devil Kebab <i>★</i> Daruvar <i>★</i> <em>Ljuto &amp; Sočno</em> <b>HOT</b> 🔥</span>
     </div>
   </div>
 
@@ -511,111 +688,96 @@
       <div class="menu-intro">
         <div>
           <span class="sect-tag" data-hr="Jelovnik" data-en="The Menu">Jelovnik</span>
-          <h2 class="sect-title" data-hr="Sve što <span class='ghost'>grize</span>" data-en="Everything that <span class='ghost'>bites</span>">Sve što <span class="ghost">grize</span></h2>
+          <h2 class="sect-title" data-hr="Sve što <span class='fire'>grize</span> na žaru" data-en="Everything that <span class='fire'>bites</span> the grill">Sve što <span class="fire">grize</span> na žaru</h2>
         </div>
         <div class="menu-note">
-          <strong data-hr="★ = bestseller" data-en="★ = bestseller">★ = bestseller</strong><br>
-          <span data-hr="Cijene u € · Umaci 0,50 €" data-en="Prices in € · Sauces 0.50 €">Cijene u € · Umaci 0,50 €</span>
+          <strong data-hr="Cijene u €" data-en="Prices in €">Cijene u €</strong><br>
+          <span data-hr="Odabir mesa: Govedina · Piletina · Mix" data-en="Meat choice: Beef · Chicken · Mix">Odabir mesa: Govedina · Piletina · Mix</span>
         </div>
       </div>
 
+      <!-- JUMP NAV -->
+      <nav class="jump-nav" id="jumpNav" aria-label="Menu categories">
+        <a href="#cat-kebab" onclick="jumpToNav(event,'cat-kebab')" data-hr="🌯 Kebab" data-en="🌯 Kebab">🌯 Kebab</a>
+        <a href="#cat-prilozi" onclick="jumpToNav(event,'cat-prilozi')" data-hr="🍟 Prilozi &amp; Jela" data-en="🍟 Sides &amp; Meals">🍟 Prilozi &amp; Jela</a>
+        <a href="#cat-pica" onclick="jumpToNav(event,'cat-pica')" data-hr="🥤 Piće" data-en="🥤 Drinks">🥤 Piće</a>
+      </nav>
+
       <!-- KEBAB -->
-      <div class="cat">
+      <div class="cat" id="cat-kebab">
         <div class="cat-head">
           <h3 class="cat-name"><span class="ict">🌯</span><span data-hr="Kebab" data-en="Kebab">Kebab</span></h3>
           <span class="cat-code">CAT-01</span>
-          <span class="catsub" data-hr="Vatra" data-en="The fire">Vatra</span>
         </div>
-        <div class="items">
-          <div class="row-feat"><span class="row-name"><span class="idx2">A1</span><span class="star">★</span><span data-hr="Kebab u lepinji" data-en="Kebab in flatbread">Kebab u lepinji</span><small data-hr="Svježe pečeno meso, salata, luk, umak po izboru" data-en="Freshly grilled meat, salad, onion, sauce of choice">Svježe pečeno meso, salata, luk, umak po izboru</small></span><span class="row-dots"></span><span class="row-price">5,50 €</span></div>
-          <div class="row"><span class="row-name"><span class="idx2">A2</span><span data-hr="Kebab u tortilji" data-en="Kebab in tortilla">Kebab u tortilji</span><small data-hr="Svježe pečeno meso, salata, luk, umak po izboru" data-en="Freshly grilled meat, salad, onion, sauce of choice">Svježe pečeno meso, salata, luk, umak po izboru</small></span><span class="row-dots"></span><span class="row-price">5,50 €</span></div>
-          <div class="row"><span class="row-name"><span class="idx2">A3</span><span data-hr="Dvostruki kebab" data-en="Double Kebab">Dvostruki kebab</span><small data-hr="Dvostruka porcija mesa, salata, luk, umak" data-en="Double meat, salad, onion, sauce">Dvostruka porcija mesa, salata, luk, umak</small></span><span class="row-dots"></span><span class="row-price">7,50 €</span></div>
-          <div class="row"><span class="row-name"><span class="idx2">A4</span><span data-hr="Mješoviti kebab" data-en="Mixed Kebab">Mješoviti kebab</span><small data-hr="Piletina i juneće meso, salata, luk, umak" data-en="Chicken and beef, salad, onion, sauce">Piletina i juneće meso, salata, luk, umak</small></span><span class="row-dots"></span><span class="row-price">6,50 €</span></div>
-          <div class="row"><span class="row-name"><span class="idx2">A5</span><span data-hr="Pileći kebab" data-en="Chicken Kebab">Pileći kebab</span><small data-hr="Pileće meso, salata, luk, umak" data-en="Chicken, salad, onion, sauce">Pileće meso, salata, luk, umak</small></span><span class="row-dots"></span><span class="row-price">5,50 €</span></div>
-          <div class="row"><span class="row-name"><span class="idx2">A6</span><span data-hr="Vegetarijanski kebab" data-en="Vegetarian Kebab">Vegetarijanski kebab</span><small data-hr="Falafel, salata, luk, umak" data-en="Falafel, salad, onion, sauce">Falafel, salata, luk, umak</small></span><span class="row-dots"></span><span class="row-price">5,50 €</span></div>
-        </div>
-      </div>
-
-      <!-- BOX MENU -->
-      <div class="cat">
-        <div class="cat-head">
-          <h3 class="cat-name"><span class="ict">📦</span><span data-hr="Box Menu" data-en="Box Menu">Box Menu</span></h3>
-          <span class="cat-code">CAT-02</span>
-          <span class="catsub" data-hr="Ludilo" data-en="Madness">Ludilo</span>
-        </div>
-        <div class="items">
-          <div class="row-feat"><span class="row-name"><span class="idx2">B1</span><span class="star">★</span><span data-hr="Kebab box" data-en="Kebab Box">Kebab box</span><small data-hr="Povrće, pommes, sir, meso, umak" data-en="Veg, fries, cheese, meat, sauce">Povrće, pommes, sir, meso, umak</small></span><span class="row-dots"></span><span class="row-price">7,50 €</span></div>
-          <div class="row"><span class="row-name"><span class="idx2">B2</span><span data-hr="Pileći box" data-en="Chicken Box">Pileći box</span><small data-hr="Povrće, pommes, sir, piletina, umak" data-en="Veg, fries, cheese, chicken, sauce">Povrće, pommes, sir, piletina, umak</small></span><span class="row-dots"></span><span class="row-price">7,50 €</span></div>
-          <div class="row"><span class="row-name"><span class="idx2">B3</span><span data-hr="Mješoviti box" data-en="Mixed Box">Mješoviti box</span><small data-hr="Piletina i juneće, povrće, pommes, umak" data-en="Chicken and beef, veg, fries, sauce">Piletina i juneće, povrće, pommes, umak</small></span><span class="row-dots"></span><span class="row-price">8,50 €</span></div>
-          <div class="row"><span class="row-name"><span class="idx2">B4</span><span data-hr="Dirty box" data-en="Dirty Box">Dirty box</span><small data-hr="Meso, pommes, cheddar, ljuti umak, hrskavi luk" data-en="Meat, fries, cheddar, hot sauce, crispy onions">Meso, pommes, cheddar, ljuti umak, hrskavi luk</small></span><span class="row-dots"></span><span class="row-price">8,50 €</span></div>
-          <div class="row"><span class="row-name"><span class="idx2">B5</span><span data-hr="Falafel box" data-en="Falafel Box">Falafel box</span><small data-hr="Falafel, povrće, pommes, umak" data-en="Falafel, veg, fries, sauce">Falafel, povrće, pommes, umak</small></span><span class="row-dots"></span><span class="row-price">7,50 €</span></div>
-        </div>
-      </div>
-
-      <!-- PIZZA KRUH -->
-      <div class="cat">
-        <div class="cat-head">
-          <h3 class="cat-name"><span class="ict">🍕</span><span data-hr="Pizza kruh" data-en="Pizza Bread">Pizza kruh</span></h3>
-          <span class="cat-code">CAT-03</span>
-          <span class="catsub" data-hr="Iskušenje" data-en="Temptation">Iskušenje</span>
-        </div>
-        <div class="items">
-          <div class="row-feat"><span class="row-name"><span class="idx2">C1</span><span class="star">★</span><span data-hr="Kebab pizza kruh" data-en="Kebab Pizza Bread">Kebab pizza kruh</span><small data-hr="Kebab meso, sir, rajčica, luk, umak" data-en="Kebab meat, cheese, tomato, onion, sauce">Kebab meso, sir, rajčica, luk, umak</small></span><span class="row-dots"></span><span class="row-price">7,00 €</span></div>
-          <div class="row"><span class="row-name"><span class="idx2">C2</span><span data-hr="Piletina pizza kruh" data-en="Chicken Pizza Bread">Piletina pizza kruh</span><small data-hr="Pileće meso, sir, rajčica, paprika, luk" data-en="Chicken, cheese, tomato, pepper, onion">Pileće meso, sir, rajčica, paprika, luk</small></span><span class="row-dots"></span><span class="row-price">7,00 €</span></div>
-          <div class="row"><span class="row-name"><span class="idx2">C3</span><span data-hr="Capricciosa kruh" data-en="Capricciosa Bread">Capricciosa kruh</span><small data-hr="Šunka, gljive, sir, rajčica" data-en="Ham, mushrooms, cheese, tomato">Šunka, gljive, sir, rajčica</small></span><span class="row-dots"></span><span class="row-price">7,00 €</span></div>
-          <div class="row"><span class="row-name"><span class="idx2">C4</span><span data-hr="Vegetarijanski kruh" data-en="Vegetarian Bread">Vegetarijanski kruh</span><small data-hr="Paprika, gljive, rajčica, masline, sir" data-en="Pepper, mushrooms, tomato, olives, cheese">Paprika, gljive, rajčica, masline, sir</small></span><span class="row-dots"></span><span class="row-price">6,50 €</span></div>
-          <div class="row"><span class="row-name"><span class="idx2">C5</span><span data-hr="Sendvič pizza kruh" data-en="Sandwich Pizza Bread">Sendvič pizza kruh</span><small data-hr="Dvije pune polovice, meso po izboru, sir, salata" data-en="Two filled halves, meat of choice, cheese, salad">Dvije pune polovice, meso po izboru, sir, salata</small></span><span class="row-dots"></span><span class="row-price">8,50 €</span></div>
-        </div>
-      </div>
-
-      <!-- SENDVIČI -->
-      <div class="cat">
-        <div class="cat-head">
-          <h3 class="cat-name"><span class="ict">🥖</span><span data-hr="Sendviči" data-en="Sandwiches">Sendviči</span></h3>
-          <span class="cat-code">CAT-04</span>
-          <span class="catsub" data-hr="Klasika" data-en="Classics">Klasika</span>
-        </div>
-        <div class="items">
-          <div class="row"><span class="row-name"><span class="idx2">D1</span><span data-hr="Hrenovka u pecivu" data-en="Hotdog bun">Hrenovka u pecivu</span><small data-hr="Hrenovka, senf, ketchup" data-en="Hotdog sausage, mustard, ketchup">Hrenovka, senf, ketchup</small></span><span class="row-dots"></span><span class="row-price">3,50 €</span></div>
-          <div class="row"><span class="row-name"><span class="idx2">D2</span><span data-hr="Čevapi u lepinji" data-en="Ćevapi flatbread">Čevapi u lepinji</span><small data-hr="10 kom, luk, kajmak" data-en="10 pcs, onion, kajmak cream">10 kom, luk, kajmak</small></span><span class="row-dots"></span><span class="row-price">6,50 €</span></div>
-          <div class="row"><span class="row-name"><span class="idx2">D3</span><span data-hr="Pljeskavica u lepinji" data-en="Pljeskavica flatbread">Pljeskavica u lepinji</span><small data-hr="Pljeskavica, salata, luk, umak" data-en="Pljeskavica patty, salad, onion, sauce">Pljeskavica, salata, luk, umak</small></span><span class="row-dots"></span><span class="row-price">6,00 €</span></div>
-          <div class="row"><span class="row-name"><span class="idx2">D4</span><span data-hr="Pileći file u lepinji" data-en="Chicken fillet flatbread">Pileći file u lepinji</span><small data-hr="Pohani pileći file, salata, umak" data-en="Breaded chicken fillet, salad, sauce">Pohani pileći file, salata, umak</small></span><span class="row-dots"></span><span class="row-price">6,00 €</span></div>
+        <div class="kt">
+          <div class="kt-head">
+            <span class="kt-h" data-hr="Ponuda" data-en="Offer">Ponuda</span>
+            <span class="kt-h" data-hr="Govedina 🐄" data-en="Beef 🐄">Govedina 🐄</span>
+            <span class="kt-h" data-hr="Piletina 🐔" data-en="Chicken 🐔">Piletina 🐔</span>
+            <span class="kt-h" data-hr="Mix 🐄🐔" data-en="Mix 🐄🐔">Mix 🐄🐔</span>
+          </div>
+          <div class="kt-row">
+            <span class="kt-name"><span data-hr="Kebab mali u lepinji" data-en="Kebab small in flatbread">Kebab mali u lepinji</span><small class="kt-spec" data-hr="180 g mesa · 80 g salate · 80 g umaka · 150 g lepinje" data-en="180 g meat · 80 g salad · 80 g sauce · 150 g bread">180 g mesa · 80 g salate · 80 g umaka · 150 g lepinje</small></span>
+            <span class="kt-p">7,00 €</span><span class="kt-p">7,50 €</span><span class="kt-p">7,50 €</span>
+          </div>
+          <div class="kt-row">
+            <span class="kt-name"><span data-hr="Kebab veliki u lepinji" data-en="Kebab large in flatbread">Kebab veliki u lepinji</span><small class="kt-spec" data-hr="240 g mesa · 80 g salate · 80 g umaka · 200 g lepinje" data-en="240 g meat · 80 g salad · 80 g sauce · 200 g bread">240 g mesa · 80 g salate · 80 g umaka · 200 g lepinje</small></span>
+            <span class="kt-p">8,50 €</span><span class="kt-p">9,00 €</span><span class="kt-p">9,00 €</span>
+          </div>
+          <div class="kt-row">
+            <span class="kt-name"><span data-hr="Kebab XXL u lepinji" data-en="Kebab XXL in flatbread">Kebab XXL u lepinji</span><small class="kt-spec" data-hr="350 g mesa · 80 g salate · 80 g umaka · 200 g lepinje" data-en="350 g meat · 80 g salad · 80 g sauce · 200 g bread">350 g mesa · 80 g salate · 80 g umaka · 200 g lepinje</small></span>
+            <span class="kt-p">9,50 €</span><span class="kt-p">10,00 €</span><span class="kt-p">10,00 €</span>
+          </div>
+          <div class="kt-row">
+            <span class="kt-name"><span data-hr="Kebab tortilja mala" data-en="Kebab tortilla small">Kebab tortilja mala</span><small class="kt-spec" data-hr="180 g mesa · 80 g salate · 80 g umaka" data-en="180 g meat · 80 g salad · 80 g sauce">180 g mesa · 80 g salate · 80 g umaka</small></span>
+            <span class="kt-p">6,00 €</span><span class="kt-p">6,50 €</span><span class="kt-p">6,50 €</span>
+          </div>
+          <div class="kt-row">
+            <span class="kt-name"><span data-hr="Kebab tortilja velika" data-en="Kebab tortilla large">Kebab tortilja velika</span><small class="kt-spec" data-hr="240 g mesa · 80 g salate · 80 g umaka" data-en="240 g meat · 80 g salad · 80 g sauce">240 g mesa · 80 g salate · 80 g umaka</small></span>
+            <span class="kt-p">7,50 €</span><span class="kt-p">8,00 €</span><span class="kt-p">8,00 €</span>
+          </div>
+          <div class="kt-row">
+            <span class="kt-name"><span data-hr="Kebab BOX" data-en="Kebab BOX">Kebab BOX</span><small class="kt-spec" data-hr="190 g mesa · 100 g pomfrita · 80 g salate · 80 g umaka" data-en="190 g meat · 100 g fries · 80 g salad · 80 g sauce">190 g mesa · 100 g pomfrita · 80 g salate · 80 g umaka</small></span>
+            <span class="kt-p">8,50 €</span><span class="kt-p">9,00 €</span><span class="kt-p">9,00 €</span>
+          </div>
+          <div class="kt-row">
+            <span class="kt-name"><span data-hr="Kebab salata" data-en="Kebab salad">Kebab salata</span><small class="kt-spec" data-hr="350 g mesa · 80 g salate · 80 g umaka" data-en="350 g meat · 80 g salad · 80 g sauce">350 g mesa · 80 g salate · 80 g umaka</small></span>
+            <span class="kt-p">7,00 €</span><span class="kt-p">7,50 €</span><span class="kt-p">7,50 €</span>
+          </div>
         </div>
       </div>
 
       <!-- PRILOZI -->
-      <div class="cat">
+      <div class="cat" id="cat-prilozi">
         <div class="cat-head">
-          <h3 class="cat-name"><span class="ict">🍟</span><span data-hr="Prilozi" data-en="Sides">Prilozi</span></h3>
-          <span class="cat-code">CAT-05</span>
-          <span class="catsub" data-hr="Potpora" data-en="Backup">Potpora</span>
+          <h3 class="cat-name"><span class="ict">🍟</span><span data-hr="Prilozi / Dodaci" data-en="Sides / Extras">Prilozi / Dodaci</span></h3>
+          <span class="cat-code">CAT-02</span>
         </div>
         <div class="items">
-          <div class="row"><span class="row-name"><span class="idx2">E1</span><span data-hr="Pommes" data-en="French Fries">Pommes</span><small>150 g</small></span><span class="row-dots"></span><span class="row-price">2,50 €</span></div>
-          <div class="row"><span class="row-name"><span class="idx2">E2</span><span data-hr="Batat" data-en="Sweet Potato Fries">Batat</span><small>150 g</small></span><span class="row-dots"></span><span class="row-price">3,50 €</span></div>
-          <div class="row"><span class="row-name"><span class="idx2">E3</span><span data-hr="Onion Rings" data-en="Onion Rings">Onion Rings</span><small data-hr="10 kom" data-en="10 pcs">10 kom</small></span><span class="row-dots"></span><span class="row-price">3,50 €</span></div>
-          <div class="row"><span class="row-name"><span class="idx2">E4</span><span data-hr="Mozzarella Sticks" data-en="Mozzarella Sticks">Mozzarella Sticks</span><small data-hr="6 kom" data-en="6 pcs">6 kom</small></span><span class="row-dots"></span><span class="row-price">3,90 €</span></div>
-          <div class="row"><span class="row-name"><span class="idx2">E5</span><span data-hr="Kroketi" data-en="Croquettes">Kroketi</span><small data-hr="4 kom" data-en="4 pcs">4 kom</small></span><span class="row-dots"></span><span class="row-price">3,50 €</span></div>
-          <div class="row"><span class="row-name"><span class="idx2">E6</span><span data-hr="Umaci" data-en="Dipping Sauces">Umaci</span><small data-hr="Kebab, češnjak, ljuti, rajčica" data-en="Kebab, garlic, hot, tomato">Kebab, češnjak, ljuti, rajčica</small></span><span class="row-dots"></span><span class="row-price">0,50 €</span></div>
+          <div class="row"><span class="row-name"><span data-hr="Pommes frites mali" data-en="French fries small">Pommes frites mali</span><small data-hr="180 g pomfrita · 80 g umaka" data-en="180 g fries · 80 g sauce">180 g pomfrita · 80 g umaka</small></span><span class="row-dots"></span><span class="row-price">3,00 €</span></div>
+          <div class="row"><span class="row-name"><span data-hr="Pommes frites veliki" data-en="French fries large">Pommes frites veliki</span><small data-hr="280 g pomfrita · 80 g umaka" data-en="280 g fries · 80 g sauce">280 g pomfrita · 80 g umaka</small></span><span class="row-dots"></span><span class="row-price">4,00 €</span></div>
+          <div class="row"><span class="row-name"><span data-hr="Mozzarella štapići" data-en="Mozzarella sticks">Mozzarella štapići</span><small data-hr="160 g mozzarella štapića" data-en="160 g of mozzarella sticks">160 g mozzarella štapića</small></span><span class="row-dots"></span><span class="row-price">4,50 €</span></div>
+          <div class="row"><span class="row-name"><span data-hr="Onion rings" data-en="Onion rings">Onion rings</span><small data-hr="10 komada" data-en="10 pieces">10 komada</small></span><span class="row-dots"></span><span class="row-price">4,50 €</span></div>
+          <div class="row"><span class="row-name"><span data-hr="Pileći strips i pommes" data-en="Chicken strips & fries">Pileći strips i pommes</span><small data-hr="5 kom chicken stripsa · 150 g pomfrita" data-en="5 pc chicken strips · 150 g fries">5 kom chicken stripsa · 150 g pomfrita</small></span><span class="row-dots"></span><span class="row-price">7,00 €</span></div>
+          <span class="combo-tag" data-hr="🍽️ Kompletna jela" data-en="🍽️ Full meals">🍽️ Kompletna jela</span>
+          <div class="row-feat"><span class="row-name"><span data-hr="Crispy box" data-en="Crispy box">Crispy box</span><small data-hr="chicken nuggets · strips · wings · onion rings · pommes frites · mozzarella štapići · 3 umaka" data-en="chicken nuggets · strips · wings · onion rings · fries · mozzarella sticks · 3 sauces">chicken nuggets · strips · wings · onion rings · pommes frites · mozzarella štapići · 3 umaka</small></span><span class="row-dots"></span><span class="row-price"><span class="sz">M</span>10,00 €<br><span class="sz">L</span>19,50 €<br><span class="sz">XL</span>34,50 €</span></div>
+          <div class="row-feat"><span class="row-name"><span data-hr="Devil plata" data-en="Devil platter">Devil plata</span><small data-hr="pileći file 400 g · juneći file 400 g · sve salate · oba umaka · 3 lepinje (150 g) · 200 g pomfrita" data-en="chicken fillet 400 g · beef fillet 400 g · all salads · both sauces · 3 flatbreads (150 g) · 200 g fries">pileći file 400 g · juneći file 400 g · sve salate · oba umaka · 3 lepinje (150 g) · 200 g pomfrita</small></span><span class="row-dots"></span><span class="row-price">25,00 €</span></div>
+          <div class="row"><span class="row-name"><span data-hr="Ayran" data-en="Ayran">Ayran</span></span><span class="row-dots"></span><span class="row-price">2,50 €</span></div>
+          <div class="row"><span class="row-name"><span data-hr="Feta sir" data-en="Feta cheese">Feta sir</span></span><span class="row-dots"></span><span class="row-price">1,00 €</span></div>
+          <div class="row"><span class="row-name"><span data-hr="Prženi luk" data-en="Fried onions">Prženi luk</span></span><span class="row-dots"></span><span class="row-price">1,00 €</span></div>
         </div>
       </div>
 
       <!-- PIĆA -->
-      <div class="cat">
+      <div class="cat" id="cat-pica">
         <div class="cat-head">
-          <h3 class="cat-name"><span class="ict">🥤</span><span data-hr="Pića" data-en="Drinks">Pića</span></h3>
-          <span class="cat-code">CAT-06</span>
-          <span class="catsub" data-hr="Gas" data-en="Fuel">Gas</span>
+          <h3 class="cat-name"><span class="ict">🥤</span><span data-hr="Piće" data-en="Drinks">Piće</span></h3>
+          <span class="cat-code">CAT-03</span>
         </div>
         <div class="items">
-          <div class="row"><span class="row-name"><span class="idx2">F1</span><span>Pepsi / Pepsi Zero / 7UP 0,25</span></span><span class="row-dots"></span><span class="row-price">2,50 €</span></div>
-          <div class="row"><span class="row-name"><span class="idx2">F2</span><span data-hr="Pepsi limenka 0,33" data-en="Pepsi Can 0.33">Pepsi limenka 0,33</span></span><span class="row-dots"></span><span class="row-price">2,90 €</span></div>
-          <div class="row"><span class="row-name"><span class="idx2">F3</span><span data-hr="Studena ledeni čaj 0,25" data-en="Studena Iced Tea 0.25">Studena ledeni čaj 0,25</span><small data-hr="Razni okusi" data-en="Assorted flavours">Razni okusi</small></span><span class="row-dots"></span><span class="row-price">2,90 €</span></div>
-          <div class="row"><span class="row-name"><span class="idx2">F4</span><span data-hr="Fructal sok 0,2" data-en="Fructal Juice 0.2">Fructal sok 0,2</span><small data-hr="Razni okusi" data-en="Assorted flavours">Razni okusi</small></span><span class="row-dots"></span><span class="row-price">2,90 €</span></div>
-          <div class="row"><span class="row-name"><span class="idx2">F5</span><span data-hr="Voda 0,25" data-en="Water 0.25">Voda 0,25</span></span><span class="row-dots"></span><span class="row-price">1,50 €</span></div>
-          <div class="row"><span class="row-name"><span class="idx2">F6</span><span>Red Bull 0,25</span></span><span class="row-dots"></span><span class="row-price">3,50 €</span></div>
-          <div class="row"><span class="row-name"><span class="idx2">F7</span><span>Heineken 0,4</span></span><span class="row-dots"></span><span class="row-price">3,50 €</span></div>
-          <div class="row"><span class="row-name"><span class="idx2">F8</span><span data-hr="Ožujsko 0,5" data-en="Ožujsko 0.5">Ožujsko 0,5</span></span><span class="row-dots"></span><span class="row-price">3,00 €</span></div>
+          <div class="row"><span class="row-name"><span data-hr="Coca-Cola 0,33 / 0,5 l" data-en="Coca-Cola 0.33 / 0.5 l">Coca-Cola 0,33 / 0,5 l</span></span><span class="row-dots"></span><span class="row-price">2,50 €</span></div>
+          <div class="row"><span class="row-name"><span data-hr="Ledeni čaj / Ice tea 0,5 l" data-en="Ice tea 0.5 l">Ledeni čaj / Ice tea 0,5 l</span></span><span class="row-dots"></span><span class="row-price">2,50 €</span></div>
+          <div class="row"><span class="row-name"><span data-hr="Voda prirodna / gazirana 0,5 l" data-en="Still / sparkling water 0.5 l">Voda prirodna / gazirana 0,5 l</span></span><span class="row-dots"></span><span class="row-price">2,50 €</span></div>
         </div>
       </div>
 
@@ -633,7 +795,7 @@
         </div>
         <div class="about-copy">
           <span class="sect-tag" data-hr="O nama" data-en="About us">O nama</span>
-          <h2 class="sect-title" data-hr="Kebab koji<br>radi <span class='lime'>pakao</span>" data-en="Kebab that<br>raises <span class='lime'>hell</span>">Kebab koji<br>radi <span class="lime">pakao</span></h2>
+          <h2 class="sect-title" data-hr="Kebab koji<br>radi <span class='fire'>pakao</span>" data-en="Kebab that<br>raises <span class='fire'>hell</span>">Kebab koji<br>radi <span class="fire">pakao</span></h2>
           <p data-hr="Devil Kebab postoji zato što vjerujemo da kebab može biti više od brze hrane. Svježe meso, domaći umaci, hrskavo tijesto — sve se priprema na licu mjesta, bez prečaca. Dođite gladni, otiđite siti." data-en="Devil Kebab exists because we believe kebab can be more than fast food. Fresh meat, house sauces, crispy bread — everything made on the spot, no shortcuts. Come hungry, leave happy.">Devil Kebab postoji zato što vjerujemo da kebab može biti više od brze hrane. Svježe meso, domaći umaci, hrskavo tijesto — sve se priprema na licu mjesta, bez prečaca. Dođite gladni, otiđite siti.</p>
           <div class="stats">
             <div class="stat"><div class="stat-num">100%</div><div class="stat-label" data-hr="Svježe" data-en="Fresh">Svježe</div></div>
@@ -648,8 +810,7 @@
   <!-- ===== VISIT ===== -->
   <section class="section" id="visit">
     <div class="shell">
-      <span class="sect-tag" data-hr="Posjetite nas" data-en="Visit Us">Posjetite nas</span>
-      <h2 class="sect-title" data-hr="Dođite gladni 🌶️" data-en="Come hungry 🌶️">Dođite gladni 🌶️</h2>
+      <span class="sect-tag lg" data-hr="Posjetite nas" data-en="Visit Us">Posjetite nas</span>
       <div class="visit-grid">
         <a href="https://maps.google.com/?q=Trg+kralja+Tomislava+16,+Daruvar" target="_blank" rel="noreferrer" class="vcard">
           <span class="mono" data-hr="/// Lokacija" data-en="/// Location">/// Lokacija</span>
@@ -725,11 +886,40 @@
     document.querySelectorAll('[data-hr]').forEach(el => {
       el.innerHTML = isHR ? el.dataset.hr : el.dataset.en;
     });
-    const btn = document.getElementById('langToggle');
-    btn.querySelector('.flag').textContent = isHR ? '🇺🇸' : '🇭🇷';
-    document.getElementById('langLabel').textContent = isHR ? 'EN' : 'HR';
+    document.querySelectorAll('.lang-switch').forEach(el => {
+      el.querySelector('.flag').textContent = isHR ? '🇺🇸' : '🇭🇷';
+      el.querySelector('.lang-label').textContent = isHR ? 'EN' : 'HR';
+    });
     document.documentElement.lang = currentLang;
   }
+
+  function jumpToNav(event, id) {
+    event.preventDefault();
+    const target = document.getElementById(id);
+    if (!target) return;
+    const topbar = document.querySelector('.topbar');
+    const nav = document.querySelector('.jump-nav');
+    const topbarH = topbar && getComputedStyle(topbar).display !== 'none' ? topbar.offsetHeight : 0;
+    const navH = nav ? nav.offsetHeight : 0;
+    const y = target.getBoundingClientRect().top + window.pageYOffset - navH - topbarH - 14;
+    window.scrollTo({ top: Math.max(y, 0), behavior: 'smooth' });
+    history.replaceState(null, '', '#' + id);
+  }
+
+  function initJumpSpy() {
+    const pills = document.querySelectorAll('.jump-nav a');
+    if (!pills.length || !('IntersectionObserver' in window)) return;
+    const cats = document.querySelectorAll('.cat');
+    const spy = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          pills.forEach(p => p.classList.toggle('active', p.getAttribute('href') === '#' + e.target.id));
+        }
+      });
+    }, { rootMargin: '-15% 0px -70% 0px', threshold: 0 });
+    cats.forEach(c => spy.observe(c));
+  }
+  initJumpSpy();
 </script>
 
 </body>
