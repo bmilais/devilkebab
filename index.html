@@ -570,6 +570,20 @@ font-size: 0.85rem; font-weight: 800;
     }
     .sticky-order a:hover { transform: scale(1.02); }
     @media (max-width: 767px) { .sticky-order { display: block; } }
+  /* ================= BACK TO TOP ================= */
+    .to-top {
+      position: fixed; left: 50%; bottom: 1.2rem; z-index: 80;
+      width: 3.1rem; height: 3.1rem; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: #fff; border: 1px solid rgba(255,255,255,0.28);
+      box-shadow: 0 8px 26px rgba(37,99,235,0.55);
+      cursor: pointer;
+      opacity: 0; visibility: hidden; transform: translate(-50%, 14px);
+      transition: opacity 0.25s, transform 0.25s, visibility 0.25s;
+    }
+    .to-top.show { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+    .to-top:hover { transform: translate(-50%, -3px); box-shadow: 0 12px 32px rgba(37,99,235,0.75); }
   </style>
 </head>
 <body>
@@ -854,6 +868,11 @@ font-size: 0.85rem; font-weight: 800;
 </div>
 -->
 
+<!-- ===== BACK TO TOP ===== -->
+<button class="to-top" id="toTop" aria-label="Back to top" title="Back to top">
+  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 15 7-7 7 7"/></svg>
+</button>
+
 <footer>
   <div class="foot">
     <div class="foot-brand">
@@ -924,6 +943,18 @@ font-size: 0.85rem; font-weight: 800;
     cats.forEach(c => spy.observe(c));
   }
   initJumpSpy();
+
+  const toTop = document.getElementById('toTop');
+  const marquee = document.querySelector('.marquee');
+  function updateToTop() {
+    const marqueeBottom = marquee ? (marquee.offsetTop + marquee.offsetHeight) : 0;
+    toTop.classList.toggle('show', window.pageYOffset > marqueeBottom);
+  }
+  window.addEventListener('scroll', updateToTop, { passive: true });
+  if (toTop) {
+    toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    updateToTop();
+  }
 </script>
 
 </body>
